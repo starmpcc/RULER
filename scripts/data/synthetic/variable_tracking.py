@@ -259,19 +259,18 @@ def sys_vartrack_w_noise_random(num_samples: int, max_seq_length: int, increment
         while(True):
             try:
                 input_text, answer = generate_input_output(used_noises, num_chains, num_hops, is_icl=add_fewshot & (icl_example is None))
-                length = len(TOKENIZER.text_to_tokens(input_text)) + tokens_to_generate + example_tokens
+                if add_fewshot and (icl_example is not None):
+                    # insert icl_example between model template and input
+                    cutoff = input_text.index(TASKS['variable_tracking']['template'][:20])
+                    input_text = input_text[:cutoff] + randomize_icl(icl_example) + '\n' + input_text[cutoff:]
+                if args.remove_newline_tab:
+                    input_text = ' '.join(input_text.replace('\n', ' ').replace('\t', ' ').strip().split())
+                length = len(TOKENIZER.text_to_tokens(input_text)) + tokens_to_generate
                 assert length <= max_seq_length, f"{length} exceeds max_seq_length."
                 break
             except:
                 if used_noises > incremental:
                     used_noises -= incremental
-
-        if add_fewshot and (icl_example is not None):
-            # insert icl_example between model template and input
-            cutoff = input_text.index(TASKS['variable_tracking']['template'][:20])
-            input_text = input_text[:cutoff] + randomize_icl(icl_example) + '\n' + input_text[cutoff:]
-        if args.remove_newline_tab:
-            input_text = ' '.join(input_text.replace('\n', ' ').replace('\t', ' ').strip().split())
 
         if final_output:
             answer_prefix_index = input_text.rfind(TASKS['variable_tracking']['answer_prefix'][:10]) # use first 10 char of answer prefix to locate it
