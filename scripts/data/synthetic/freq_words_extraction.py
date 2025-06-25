@@ -110,7 +110,7 @@ def sys_kwext(num_samples: int, max_seq_length: int, incremental: int = 10):
     write_jsons = []
     tokens_to_generate = args.tokens_to_generate
 
-    max_seq_length -= args.model_template_token
+    max_seq_length -= args.model_template_token + tokens_to_generate
     vocab_size = max_seq_length // 50 if args.vocab_size == -1 else args.vocab_size
 
     # get number of words
