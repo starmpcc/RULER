@@ -141,7 +141,7 @@ def sys_word_pair_random(num_samples: int, max_seq_length: int, save_dir: str, i
 
     # Let's do 3x to allow for some slack since we can get unlucky due to sampling.
     # NOTE: We should test this for really large sequence lengths to make sure it's reasonable.
-    estimated_max_words = int((max_seq_length / tokens_per_words) * 3)
+    estimated_max_words = max_seq_length
 
     # Binary search for optimal haystack size
     lower_bound = incremental
