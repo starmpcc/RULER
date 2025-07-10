@@ -135,13 +135,13 @@ def sys_word_pair_random(num_samples: int, max_seq_length: int, save_dir: str, i
 
 
     # Estimate tokens per question to determine reasonable upper bound
-    sample_input_text, _ = generate_input_output(incremental)
+    sample_input_text, _ = generate_input_output(4096)
     sample_tokens = len(TOKENIZER.text_to_tokens(sample_input_text))
-    tokens_per_words = sample_tokens / incremental
+    tokens_per_words = sample_tokens / 4096
 
     # Let's do 3x to allow for some slack since we can get unlucky due to sampling.
     # NOTE: We should test this for really large sequence lengths to make sure it's reasonable.
-    estimated_max_words = max_seq_length
+    estimated_max_words = int(max_seq_length // tokens_per_words) * 2
 
     # Binary search for optimal haystack size
     lower_bound = incremental
