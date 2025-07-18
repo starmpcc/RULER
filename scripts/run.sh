@@ -23,8 +23,8 @@ fi
 
 
 # Root Directories
-GPUS="1" # GPU size for tensor_parallel.
-ROOT_DIR="benchmark_root" # the path that stores generated task samples and model predictions.
+GPUS=$GPU_PER_NODE_COUNT # GPU size for tensor_parallel.
+ROOT_DIR=$AMLT_OUTPUT_DIR # the path that stores generated task samples and model predictions.
 MODEL_DIR="../.." # the path that contains individual model folders from HUggingface.
 ENGINE_DIR="." # the path that contains individual engine folders from TensorRT-LLM.
 BATCH_SIZE=1  # increase to improve GPU utilization
@@ -39,13 +39,6 @@ if [ -z "${MODEL_PATH}" ]; then
     echo "Model: ${MODEL_NAME} is not supported"
     exit 1
 fi
-
-
-export OPENAI_API_KEY=${OPENAI_API_KEY}
-export GEMINI_API_KEY=${GEMINI_API_KEY}
-export AZURE_API_ID=${AZURE_ID}
-export AZURE_API_SECRET=${AZURE_SECRET}
-export AZURE_API_ENDPOINT=${AZURE_ENDPOINT}
 
 
 # Benchmark and Tasks
