@@ -193,6 +193,7 @@ def generate_samples(num_samples: int, max_seq_length: int, save_dir: str, incre
     logger.info(f'Final optimal haystack size (number of docs): {num_docs}')
 
     # Generate samples
+    # BUG: 여기서 2048 이하 못 만들어서 infinite loop 걸린듯..?
     for index in tqdm(range(num_samples)):
         used_docs = num_docs
         while(True):
